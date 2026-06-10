@@ -1,5 +1,5 @@
 import 'package:chicky/core/icons.dart';
-import 'package:chicky/widgets/test.dart';
+import 'package:chicky/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import '../core/colours.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +9,7 @@ class _HeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -56,7 +56,7 @@ class _Dashboard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
+          border: Border.all(color: Colours.gray),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -100,7 +100,7 @@ class _Dashboard extends StatelessWidget {
 
   Widget _rowMonitoring() {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 14),
       child: Row(
         children: [
           _cardRow(icon: IconsSVG.chicken, name: "Ayam", sum: 200),
@@ -125,7 +125,7 @@ class _BannerCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 20),
+          margin: EdgeInsets.only(bottom: 14),
           padding: EdgeInsets.all(14),
           width: double.infinity,
           height: 76,
@@ -152,7 +152,7 @@ class _BannerCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 12,
+          bottom: 8,
           right: -4,
           child: Container(
             height: 86,
@@ -168,20 +168,18 @@ class _BannerCard extends StatelessWidget {
   }
 }
 
-class _recentHistoryLog extends StatelessWidget {
-
-  List<double> dataFCR = [1.1, 1.2, 0.8];
-
-  DateTime now = DateTime.now();
+class _RecentHistoryLog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<double> dataFCR = [1.1, 1.2, 0.8];
+
     return Container(
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.black),
+        border: Border.all(color: Colours.gray),
       ),
       child: Column(
         children: [
@@ -193,7 +191,9 @@ class _recentHistoryLog extends StatelessWidget {
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavbar(index: 2)));
+                },
                 child: Text(
                   "See all",
                   style: TextStyle(color: Colours.mainOrange, fontSize: 14, fontWeight: FontWeight.w500),
@@ -211,7 +211,7 @@ class _recentHistoryLog extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 10),
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
+                  border: Border.all(color: Colours.gray),
                   borderRadius: BorderRadius.circular(12)
                 ),
                 width: double.infinity,
@@ -226,7 +226,7 @@ class _recentHistoryLog extends StatelessWidget {
                       ],
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text("Kamis", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
                         Text("21-12-2012", style: TextStyle( fontSize: 12,))
@@ -244,6 +244,7 @@ class _recentHistoryLog extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => HomeState();
 }
@@ -262,7 +263,7 @@ class HomeState extends State<HomeScreen> {
               FcrDesemberChart(),
               _Dashboard(),
               _BannerCard(),
-              _recentHistoryLog(),
+              _RecentHistoryLog(),
             ],
           ),
         ),

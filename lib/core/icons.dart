@@ -3,5 +3,8 @@ class IconsSVG{
   static const String chicken = 'assets/icons/chicken_high_contrast.svg';
   static const String beans = 'assets/icons/beans_high_contrast.svg';
   static const String egg = 'assets/icons/egg_high_contrast.svg';
+  static const String home = 'assets/icons/home.svg';
+  static const String pencil = 'assets/icons/pencil.svg';
+  static const String file = 'assets/icons/file.svg';
   
 }
