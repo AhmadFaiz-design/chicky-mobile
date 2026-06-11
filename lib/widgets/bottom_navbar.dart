@@ -41,10 +41,10 @@ class _NavBarButton extends StatelessWidget {
               gradient:
                   buttonIndex == id
                       ? LinearGradient(
-                        colors: [Colours.mainOrange.withOpacity(0.05),Colors.white],
+                        colors: [Colours.mainOrange.withOpacity(0.1),Colors.white],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        stops: [0.0, 0.4],
+                        stops: [0.0, 0.3],
                       )
                       : LinearGradient(colors: [Colors.white, Colors.white]),
             ),
