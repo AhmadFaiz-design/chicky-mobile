@@ -182,19 +182,20 @@ class ResultFCR extends StatelessWidget {
       width: double.infinity,
       height: 90,
       decoration: BoxDecoration(
-        color: Colours.mainOrange,
+        color: Colors.white,
+        border: Border.all(color: Colours.mainOrange, width: 2),
         borderRadius: BorderRadius.circular(12)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Hasil FCR", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+          Text("Hasil FCR", style: TextStyle(color: Colours.mainOrange, fontSize: 14, fontWeight: FontWeight.w500)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("0.0", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-              Text("Kg", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500)),
+              Text("0.0", style: TextStyle(color: Colours.mainOrange, fontSize: 24, fontWeight: FontWeight.bold)),
+              Text("Kg", style: TextStyle(color: Colours.mainOrange, fontSize: 20, fontWeight: FontWeight.w500)),
             ],
           )
         ],
@@ -210,17 +211,17 @@ class InputBottom extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          Expanded(
-            child: TextButton(
-              onPressed: (){},
-              style: TextButton.styleFrom(
-                foregroundColor: Colours.mainOrange,
-                side: BorderSide(color: Colours.mainOrange),
-              ),
-              child: Text("Reset")
-            )
-          ),
-          SizedBox(width: 10),
+          // Expanded(
+          //   child: TextButton(
+          //     onPressed: (){},
+          //     style: TextButton.styleFrom(
+          //       foregroundColor: Colours.mainOrange,
+          //       side: BorderSide(color: Colours.mainOrange),
+          //     ),
+          //     child: Text("Reset")
+          //   )
+          // ),
+          // SizedBox(width: 10),
           Expanded(
             child: TextButton(
               onPressed: (){},
