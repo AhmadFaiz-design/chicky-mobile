@@ -1,5 +1,6 @@
 import 'package:chicky/core/colours.dart';
 import 'package:flutter/material.dart';
+import 'package:chicky/widgets/filterCard_history.dart';
 
 class HeaderCard extends StatelessWidget {
   @override
@@ -313,7 +314,7 @@ class HistoryState extends State<HistoryScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(children: [HeaderCard(), FilterCard(), HistoryCard()]),
+          child: Column(children: [HeaderCard(), FilterCardHistory(), HistoryCard()]),
         ),
       ),
     );
