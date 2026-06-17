@@ -30,7 +30,7 @@ class FilterCard extends StatelessWidget {
               ),
             ),
             onPressed: () {},
-            child: Text("Semua", style: TextStyle(fontSize: 14),),
+            child: Text("Semua", style: TextStyle(fontSize: 14)),
           ),
           SizedBox(width: 10),
           TextButton(
@@ -46,7 +46,7 @@ class FilterCard extends StatelessWidget {
               ),
             ),
             onPressed: () {},
-            child: Text("7 Days", style: TextStyle(fontSize: 14),),
+            child: Text("7 Days", style: TextStyle(fontSize: 14)),
           ),
           SizedBox(width: 10),
           TextButton(
@@ -62,7 +62,7 @@ class FilterCard extends StatelessWidget {
               ),
             ),
             onPressed: () {},
-            child: Text("1 Month", style: TextStyle(fontSize: 14),),
+            child: Text("1 Month", style: TextStyle(fontSize: 14)),
           ),
         ],
       ),
@@ -71,21 +71,30 @@ class FilterCard extends StatelessWidget {
 }
 
 class HistoryCard extends StatelessWidget {
+  final List<String> sapi = ["Sapi", "Sapi", "Sapi", "Kuda", "Kalajengking", "kuda", "ucup"];
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colours.grayBold),
+        borderRadius: BorderRadius.circular(12),
+      ),
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 child: Row(
                   children: [
-                    Text("Kamis"),
+                    Text("Kamis", style: TextStyle(fontSize: 12)),
+                    SizedBox(width: 4),
                     Text("•"),
-                    Text("21-06-2026"),
+                    SizedBox(width: 4),
+                    Text("21-06-2026", style: TextStyle(fontSize: 12)),
                   ],
                 ),
               ),
@@ -93,14 +102,199 @@ class HistoryCard extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colours.green),
-                  borderRadius: BorderRadius.circular(12)
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Text("Low to 1%", style: TextStyle(color: Colours.green),),
-              )
+                child: Text(
+                  "Low to 1%",
+                  style: TextStyle(color: Colours.green, fontSize: 12),
+                ),
+              ),
             ],
-          )
+          ),
+          SizedBox(height: 6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "1,1 Kg FCR",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colours.green.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colours.green,
+                              ),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              "3 Indicates",
+                              style: TextStyle(
+                                color: Colours.grayBold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colours.red.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colours.red,
+                              ),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              "4 Indicates",
+                              style: TextStyle(
+                                color: Colours.grayBold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colours.mainOrange,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                ),
+                child: Text(
+                  "More",
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 6),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colours.green.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: sapi.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 4,
+                childAspectRatio: 7
+              ),
+
+              itemBuilder: (context, index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colours.green,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Text(sapi[index], style: TextStyle(
+                                color: Colours.grayBold,
+                                fontSize: 12,
+                              ),),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 6),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colours.red.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: sapi.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 4,
+                childAspectRatio: 7
+              ),
+
+              itemBuilder: (context, index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colours.red,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Text(sapi[index], style: TextStyle(
+                                color: Colours.grayBold,
+                                fontSize: 12,
+                              ),),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }
