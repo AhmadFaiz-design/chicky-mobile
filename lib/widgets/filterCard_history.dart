@@ -68,7 +68,6 @@ class FilterCardState extends State<FilterCardHistory> {
           _FilterButton(title: "7 Days", index: index, idButton: 1, callBack: _getQuery),
           SizedBox(width: 10),
           _FilterButton(title: "1 Month", index: index, idButton: 2, callBack: _getQuery),
-          
         ],
       ),
     );
