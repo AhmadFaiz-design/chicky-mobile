@@ -1,4 +1,6 @@
+import 'package:chicky/controllers/fcr_controller.dart';
 import 'package:chicky/core/colours.dart';
+import 'package:chicky/models/fcr_model.dart';
 import 'package:flutter/material.dart';
 
 class HeaderCard extends StatelessWidget {
@@ -12,6 +14,24 @@ class HeaderCard extends StatelessWidget {
 }
 
 class InputField extends StatelessWidget {
+  final TextEditingController controllerAyam;
+  final TextEditingController controllerPakan;
+  final TextEditingController controllerSuhu;
+  final TextEditingController controllerKelembaban;
+  final TextEditingController controllerCahaya;
+  final TextEditingController controllerAmonia;
+  final TextEditingController controllerBising;
+
+  InputField({
+    required this.controllerAyam,
+    required this.controllerPakan,
+    required this.controllerSuhu,
+    required this.controllerKelembaban,
+    required this.controllerCahaya,
+    required this.controllerAmonia,
+    required this.controllerBising,
+  });
+
   Widget row2Input({
     required String titleText1,
     required String titleText2,
@@ -19,6 +39,8 @@ class InputField extends StatelessWidget {
     required String hintText2,
     required String unitText1,
     required String unitText2,
+    required TextEditingController controller1,
+    required TextEditingController controller2,
   }) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
@@ -31,6 +53,7 @@ class InputField extends StatelessWidget {
                 Text(titleText1, style: TextStyle(fontSize: 14)),
                 SizedBox(height: 6),
                 TextField(
+                  controller: controller1,
                   style: TextStyle(fontSize: 14),
                   decoration: InputDecoration(
                     hintText: hintText1,
@@ -73,6 +96,7 @@ class InputField extends StatelessWidget {
                 Text(titleText2, style: TextStyle(fontSize: 14)),
                 SizedBox(height: 6),
                 TextField(
+                  controller: controller2,
                   style: TextStyle(fontSize: 14),
                   decoration: InputDecoration(
                     hintText: hintText2,
@@ -112,7 +136,11 @@ class InputField extends StatelessWidget {
     );
   }
 
-  Widget rowInput({required String titleText, required String hintText}) {
+  Widget rowInput({
+    required String titleText,
+    required String hintText,
+    required TextEditingController controller,
+  }) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: Column(
@@ -121,6 +149,7 @@ class InputField extends StatelessWidget {
           Text(titleText, style: TextStyle(fontSize: 14)),
           SizedBox(height: 6),
           TextField(
+            controller: controller,
             style: TextStyle(fontSize: 14),
             decoration: InputDecoration(
               suffixIcon: Text(""),
@@ -156,6 +185,8 @@ class InputField extends StatelessWidget {
           hintText2: "0",
           unitText1: "Ekor",
           unitText2: "Kg",
+          controller1: controllerAyam,
+          controller2: controllerPakan,
         ),
         row2Input(
           titleText1: "Suhu",
@@ -164,16 +195,33 @@ class InputField extends StatelessWidget {
           hintText2: "0",
           unitText1: "C",
           unitText2: "%",
+          controller1: controllerSuhu,
+          controller2: controllerKelembaban,
         ),
-        rowInput(titleText: "Tingkatan Cahaya", hintText: "0"),
-        rowInput(titleText: "Gas Amonia", hintText: "0"),
-        rowInput(titleText: "Noise", hintText: "0"),
+        rowInput(
+          titleText: "Tingkatan Cahaya",
+          hintText: "0",
+          controller: controllerCahaya,
+        ),
+        rowInput(
+          titleText: "Gas Amonia",
+          hintText: "0",
+          controller: controllerAmonia,
+        ),
+        rowInput(
+          titleText: "Noise",
+          hintText: "0",
+          controller: controllerBising,
+        ),
       ],
     );
   }
 }
 
 class ResultFCR extends StatelessWidget {
+  final double resultFCR;
+  ResultFCR({required this.resultFCR});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -184,20 +232,41 @@ class ResultFCR extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colours.mainOrange, width: 2),
-        borderRadius: BorderRadius.circular(12)
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Hasil FCR", style: TextStyle(color: Colours.mainOrange, fontSize: 14, fontWeight: FontWeight.w500)),
+          Text(
+            "Hasil FCR",
+            style: TextStyle(
+              color: Colours.mainOrange,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("0.0", style: TextStyle(color: Colours.mainOrange, fontSize: 24, fontWeight: FontWeight.bold)),
-              Text("Kg", style: TextStyle(color: Colours.mainOrange, fontSize: 20, fontWeight: FontWeight.w500)),
+              Text(
+                resultFCR.toStringAsFixed(1),
+                style: TextStyle(
+                  color: Colours.mainOrange,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "Kg",
+                style: TextStyle(
+                  color: Colours.mainOrange,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -205,8 +274,76 @@ class ResultFCR extends StatelessWidget {
 }
 
 class InputBottom extends StatelessWidget {
+  final Function callback;
+  final TextEditingController controllerAyam;
+  final TextEditingController controllerPakan;
+  final TextEditingController controllerSuhu;
+  final TextEditingController controllerKelembaban;
+  final TextEditingController controllerCahaya;
+  final TextEditingController controllerAmonia;
+  final TextEditingController controllerBising;
+
+  InputBottom({
+    required this.controllerAyam,
+    required this.controllerPakan,
+    required this.controllerSuhu,
+    required this.controllerKelembaban,
+    required this.controllerCahaya,
+    required this.controllerAmonia,
+    required this.controllerBising,
+    required this.callback,
+  });
+
   @override
   Widget build(BuildContext context) {
+    Future<double> predictedFCR() async {
+      bool isDataEmpty = [
+        controllerAyam.text,
+        controllerPakan.text,
+        controllerSuhu.text,
+        controllerKelembaban.text,
+        controllerCahaya.text,
+        controllerAmonia.text,
+        controllerBising.text,
+      ].any((data) => data.trim().isEmpty);
+
+      if (isDataEmpty) {
+        print("Data belum diisi lengkap");
+        return 0.0;
+      }
+
+      double? ayam = double.tryParse(controllerAyam.text);
+      double? pakan = double.tryParse(controllerPakan.text);
+      double? suhu = double.tryParse(controllerSuhu.text);
+      double? kelembaban = double.tryParse(controllerKelembaban.text);
+      double? cahaya = double.tryParse(controllerCahaya.text);
+      double? amonia = double.tryParse(controllerAmonia.text);
+      double? bising = double.tryParse(controllerBising.text);
+
+      FCRModel fcrModel = FCRModel(
+        ayam: ayam!,
+        pakan: pakan!,
+        amonia: amonia!,
+        suhu: suhu!,
+        kelembaban: kelembaban!,
+        cahaya: cahaya!,
+        bising: bising!,
+      );
+
+      // controllerAyam.clear();
+      // controllerPakan.clear();
+      // controllerSuhu.clear();
+      // controllerKelembaban.clear();
+      // controllerCahaya.clear();
+      // controllerAmonia.clear();
+      // controllerBising.clear();
+
+      double resultFCR = FCRController().calculatedFCR(fcrModel);
+      print('Hasil FCR: $resultFCR');
+
+      return resultFCR;
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: Row(
@@ -224,13 +361,15 @@ class InputBottom extends StatelessWidget {
           // SizedBox(width: 10),
           Expanded(
             child: TextButton(
-              onPressed: (){},
+              onPressed: () async {
+                callback(await predictedFCR());
+              },
               style: TextButton.styleFrom(
                 backgroundColor: Colours.mainOrange,
-                foregroundColor: Colors.white
+                foregroundColor: Colors.white,
               ),
-              child: Text("Cek FCR")
-            )
+              child: Text("Cek FCR"),
+            ),
           ),
         ],
       ),
@@ -245,6 +384,46 @@ class InputScreen extends StatefulWidget {
 }
 
 class InputState extends State<InputScreen> {
+  late bool status;
+  late double _resultFCR;
+
+  // TextEditignController adalah tipe yang bisa diambil tanpa mengirimkan langsung ke parentnya
+  // atau disebut dengan pass by reference
+  late TextEditingController _controllerAyam;
+  late TextEditingController _controllerPakan;
+  late TextEditingController _controllerSuhu;
+  late TextEditingController _controllerKelembaban;
+  late TextEditingController _controllerCahaya;
+  late TextEditingController _controllerAmonia;
+  late TextEditingController _controllerBising;
+
+  @override
+  void initState() {
+    status = false;
+    _resultFCR = 0.0;
+    _controllerAyam = TextEditingController();
+    _controllerPakan = TextEditingController();
+    _controllerSuhu = TextEditingController();
+    _controllerKelembaban = TextEditingController();
+    _controllerCahaya = TextEditingController();
+    _controllerAmonia = TextEditingController();
+    _controllerBising = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controllerAyam.dispose();
+    _controllerPakan.dispose();
+    _controllerPakan.dispose();
+    _controllerSuhu.dispose();
+    _controllerKelembaban.dispose();
+    _controllerCahaya.dispose();
+    _controllerAmonia.dispose();
+    _controllerBising.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -255,10 +434,32 @@ class InputState extends State<InputScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              HeaderCard(), 
-              InputField(),
-              ResultFCR(),
-              InputBottom()
+              HeaderCard(),
+              InputField(
+                controllerAyam: _controllerAyam,
+                controllerPakan: _controllerPakan,
+                controllerSuhu: _controllerSuhu,
+                controllerKelembaban: _controllerKelembaban,
+                controllerCahaya: _controllerCahaya,
+                controllerAmonia: _controllerAmonia,
+                controllerBising: _controllerBising,
+              ),
+              ResultFCR(resultFCR: _resultFCR),
+              InputBottom(
+                callback: (resultFCR) {
+                  setState(() {
+                    status = true;
+                    _resultFCR = resultFCR;
+                  });
+                },
+                controllerAyam: _controllerAyam,
+                controllerPakan: _controllerPakan,
+                controllerSuhu: _controllerSuhu,
+                controllerKelembaban: _controllerKelembaban,
+                controllerCahaya: _controllerCahaya,
+                controllerAmonia: _controllerAmonia,
+                controllerBising: _controllerBising,
+              ),
             ],
           ),
         ),
