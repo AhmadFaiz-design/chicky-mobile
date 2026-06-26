@@ -191,8 +191,8 @@ class InputField extends StatelessWidget {
         row2Input(
           titleText1: "Suhu",
           titleText2: "Kelembaban",
-          hintText1: "0.0",
-          hintText2: "0",
+          hintText1: "28",
+          hintText2: "65",
           unitText1: "C",
           unitText2: "%",
           controller1: controllerSuhu,
@@ -200,17 +200,17 @@ class InputField extends StatelessWidget {
         ),
         rowInput(
           titleText: "Tingkatan Cahaya",
-          hintText: "0",
+          hintText: "20",
           controller: controllerCahaya,
         ),
         rowInput(
           titleText: "Gas Amonia",
-          hintText: "0",
+          hintText: "5",
           controller: controllerAmonia,
         ),
         rowInput(
           titleText: "Noise",
-          hintText: "0",
+          hintText: "45",
           controller: controllerBising,
         ),
       ],
@@ -275,6 +275,7 @@ class ResultFCR extends StatelessWidget {
 
 class InputBottom extends StatelessWidget {
   final Function callback;
+  final bool status;
   final TextEditingController controllerAyam;
   final TextEditingController controllerPakan;
   final TextEditingController controllerSuhu;
@@ -292,6 +293,7 @@ class InputBottom extends StatelessWidget {
     required this.controllerAmonia,
     required this.controllerBising,
     required this.callback,
+    required this.status,
   });
 
   @override
@@ -330,6 +332,8 @@ class InputBottom extends StatelessWidget {
         bising: bising!,
       );
 
+      wrongInputModel wrongInput = wrongInputModel();
+
       // controllerAyam.clear();
       // controllerPakan.clear();
       // controllerSuhu.clear();
@@ -338,41 +342,84 @@ class InputBottom extends StatelessWidget {
       // controllerAmonia.clear();
       // controllerBising.clear();
 
-      double resultFCR = FCRController().calculatedFCR(fcrModel);
-      print('Hasil FCR: $resultFCR');
+      double resultFCR = FCRController().calculatedFCR(inputData: fcrModel);
+      wrongInputModel validationResult = FCRController().validationCheck(
+        inputData: fcrModel,
+        wrongInput: wrongInput,
+      );
+      List<String> listWrongInput = FCRController().getValidation(
+        validationResult: validationResult,
+      );
+
+      print(validationResult.toString());
+      print(listWrongInput);
+      // print('Perlu penyesuaian input: $validationResult');
 
       return resultFCR;
     }
 
+    Widget trueBottom() {
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                onPressed: () async {
+                  bool status = true;
+                  double result = await predictedFCR();
+                  callback(result, status);
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colours.mainOrange,
+                  side: BorderSide(color: Colours.mainOrange),
+                ),
+                child: Text("Cek Lagi"),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Colours.mainOrange,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text("Simpan"),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 10),
-      child: Row(
-        children: [
-          // Expanded(
-          //   child: TextButton(
-          //     onPressed: (){},
-          //     style: TextButton.styleFrom(
-          //       foregroundColor: Colours.mainOrange,
-          //       side: BorderSide(color: Colours.mainOrange),
-          //     ),
-          //     child: Text("Reset")
-          //   )
-          // ),
-          // SizedBox(width: 10),
-          Expanded(
-            child: TextButton(
-              onPressed: () async {
-                callback(await predictedFCR());
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colours.mainOrange,
-                foregroundColor: Colors.white,
-              ),
-              child: Text("Cek FCR"),
-            ),
-          ),
-        ],
-      ),
+      child:
+          !status
+              ? Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () async {
+                        double result = await predictedFCR();
+                        bool newStatus = true;
+                        if(result == 0.0){
+                          newStatus = false;
+                        }
+                        callback(result, newStatus);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colours.mainOrange,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text("Cek FCR"),
+                    ),
+                  ),
+                ],
+              )
+              : trueBottom(),
     );
   }
 }
@@ -384,7 +431,7 @@ class InputScreen extends StatefulWidget {
 }
 
 class InputState extends State<InputScreen> {
-  late bool status;
+  late bool _status;
   late double _resultFCR;
 
   // TextEditignController adalah tipe yang bisa diambil tanpa mengirimkan langsung ke parentnya
@@ -399,7 +446,7 @@ class InputState extends State<InputScreen> {
 
   @override
   void initState() {
-    status = false;
+    _status = false;
     _resultFCR = 0.0;
     _controllerAyam = TextEditingController();
     _controllerPakan = TextEditingController();
@@ -446,10 +493,11 @@ class InputState extends State<InputScreen> {
               ),
               ResultFCR(resultFCR: _resultFCR),
               InputBottom(
-                callback: (resultFCR) {
+                callback: (resultFCR, status) {
                   setState(() {
-                    status = true;
+                    _status = status;
                     _resultFCR = resultFCR;
+                    print(status);
                   });
                 },
                 controllerAyam: _controllerAyam,
@@ -459,6 +507,7 @@ class InputState extends State<InputScreen> {
                 controllerCahaya: _controllerCahaya,
                 controllerAmonia: _controllerAmonia,
                 controllerBising: _controllerBising,
+                status: _status,
               ),
             ],
           ),

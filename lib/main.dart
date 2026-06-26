@@ -1,7 +1,6 @@
 import 'package:chicky/widgets/test.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'view/home_view.dart';
 import 'widgets/bottom_navbar.dart';
 
 void main() async {

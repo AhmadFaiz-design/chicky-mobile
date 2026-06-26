@@ -72,11 +72,86 @@ class FilterCard extends StatelessWidget {
 }
 
 class HistoryCard extends StatelessWidget {
-  final List<String> sapi = ["Sapi", "Sapi", "Sapi", "Kuda", "Kalajengking", "kuda", "ucup"];
+  final Function callback;
+  final bool isTapped;
+  final int idButton;
+  final List<int> currentIndex;
+  final List<int> removeIndex;
+
+  HistoryCard({
+    required this.callback,
+    required this.isTapped,
+    required this.idButton,
+    required this.currentIndex,
+    required this.removeIndex,
+  });
+
+  static List<String> sapi = [
+    "Sapi",
+    "Sapi",
+    "Sapi",
+    "Kuda",
+    "Kalajengking",
+    "kuda",
+    "ucup",
+  ];
+
+  static int sumList = sapi.length;
+
+  Widget _ListIndicates() {
+    return Column(
+      children: [
+        SizedBox(height: 6),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colours.red.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: sumList,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 4,
+              childAspectRatio: 7,
+            ),
+
+            itemBuilder: (context, index) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colours.red,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        sapi[index],
+                        style: TextStyle(color: Colours.grayBold, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Colours.grayBold),
         borderRadius: BorderRadius.circular(12),
@@ -99,17 +174,6 @@ class HistoryCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colours.green),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  "Low to 1%",
-                  style: TextStyle(color: Colours.green, fontSize: 12),
-                ),
-              ),
             ],
           ),
           SizedBox(height: 6),
@@ -129,39 +193,23 @@ class HistoryCard extends StatelessWidget {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(
+                          horizontal: 8,
                           vertical: 4,
-                          horizontal: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colours.green.withOpacity(0.2),
+                          border: Border.all(color: Colours.green),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colours.green,
-                              ),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              "3 Indicates",
-                              style: TextStyle(
-                                color: Colours.grayBold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          "Low to 1%",
+                          style: TextStyle(color: Colours.green, fontSize: 12),
                         ),
                       ),
                       SizedBox(width: 8),
                       Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 4,
-                          horizontal: 6,
+                          horizontal: 8,
                         ),
                         decoration: BoxDecoration(
                           color: Colours.red.withOpacity(0.2),
@@ -177,12 +225,13 @@ class HistoryCard extends StatelessWidget {
                                 color: Colours.red,
                               ),
                             ),
-                            SizedBox(width: 4),
+                            SizedBox(width: 6),
                             Text(
-                              "4 Indicates",
+                              sumList.toString(),
                               style: TextStyle(
-                                color: Colours.grayBold,
+                                color: Colours.red,
                                 fontSize: 12,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -193,109 +242,87 @@ class HistoryCard extends StatelessWidget {
                 ],
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // bool newTapped;
+                  if (removeIndex.contains(idButton)) {
+                    removeIndex.remove(idButton);
+                    currentIndex.add(idButton);
+                    callback(removeIndex, currentIndex);
+                  } else if (currentIndex.contains(idButton)) {
+                    currentIndex.remove(idButton);
+                    removeIndex.add(idButton);
+                    callback(removeIndex, currentIndex);
+                  }
+                },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: Colours.mainOrange,
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 ),
-                child: Text(
-                  "More",
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                ),
+                child:
+                    currentIndex.contains(idButton)
+                        ? Text(
+                          "More",
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        )
+                        : Text(
+                          "Less",
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
               ),
             ],
           ),
-          SizedBox(height: 6),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colours.green.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: sapi.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 4,
-                childAspectRatio: 7
-              ),
-
-              itemBuilder: (context, index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colours.green,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Text(sapi[index], style: TextStyle(
-                                color: Colours.grayBold,
-                                fontSize: 12,
-                              ),),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-          SizedBox(height: 6),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colours.red.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: sapi.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 4,
-                childAspectRatio: 7
-              ),
-
-              itemBuilder: (context, index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colours.red,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Text(sapi[index], style: TextStyle(
-                                color: Colours.grayBold,
-                                fontSize: 12,
-                              ),),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+          removeIndex.contains(idButton) ? _ListIndicates() : Container(),
         ],
       ),
+    );
+  }
+}
+
+class ListHistoryCard extends StatefulWidget {
+  @override
+  State<ListHistoryCard> createState() => ListHistoryCardState();
+}
+
+class ListHistoryCardState extends State<ListHistoryCard> {
+  late bool _isTapped;
+  late List<int> currentIndex;
+  late List<int> removeIndex;
+
+  @override
+  void initState() {
+    _isTapped = false;
+    currentIndex = [0, 1];
+    removeIndex = [];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 2,
+      itemBuilder: (context, index) {
+        int idButton = index;
+        return HistoryCard(
+          callback: (removeIndex, currentIndex) {
+            setState(() {
+              this.removeIndex = removeIndex;
+              this.currentIndex = currentIndex;
+            });
+            print(_isTapped);
+            print(currentIndex);
+            print(removeIndex);
+          },
+          isTapped: _isTapped,
+          idButton: idButton,
+          currentIndex: currentIndex,
+          removeIndex: removeIndex,
+        );
+      },
     );
   }
 }
@@ -314,7 +341,9 @@ class HistoryState extends State<HistoryScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(children: [HeaderCard(), FilterCardHistory(), HistoryCard()]),
+          child: Column(
+            children: [HeaderCard(), FilterCardHistory(), ListHistoryCard()],
+          ),
         ),
       ),
     );
