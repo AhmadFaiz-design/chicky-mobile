@@ -27,7 +27,7 @@ class FcrDesemberChart extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Grafik FCR Desember',
+                    'Grafik FCR',
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                   Row(
@@ -63,24 +63,6 @@ class FcrDesemberChart extends StatelessWidget {
                     ],
                   ),
                 ],
-              ),
-              // Tombol Dropdown "Mingguan"
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.deepOrange.shade600,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  children: [
-                    Text(
-                      'Mingguan',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 12),
-                  ],
-                ),
               ),
             ],
           ),

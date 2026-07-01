@@ -1,7 +1,11 @@
 import 'package:chicky/controllers/fcr_controller.dart';
+import 'package:chicky/models/input_rusak_model.dart';
 import 'package:chicky/core/colours.dart';
 import 'package:chicky/models/fcr_model.dart';
+import 'package:chicky/services/service_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HeaderCard extends StatelessWidget {
   @override
@@ -283,6 +287,19 @@ class InputBottom extends StatelessWidget {
   final TextEditingController controllerCahaya;
   final TextEditingController controllerAmonia;
   final TextEditingController controllerBising;
+  static FCRModel? fcrModel;
+  static InputRusakModel? inputRusakModel;
+  static List<String>? listWrongInput;
+  static double? resultFCR;
+  static double? ayam;
+  static double? pakan;
+  static double? suhu;
+  static double? kelembaban;
+  static double? cahaya;
+  static double? amonia;
+  static double? bising;
+  static String? namaHari;
+  static String? tanggalLengkap;
 
   InputBottom({
     required this.controllerAyam,
@@ -314,15 +331,19 @@ class InputBottom extends StatelessWidget {
         return 0.0;
       }
 
-      double? ayam = double.tryParse(controllerAyam.text);
-      double? pakan = double.tryParse(controllerPakan.text);
-      double? suhu = double.tryParse(controllerSuhu.text);
-      double? kelembaban = double.tryParse(controllerKelembaban.text);
-      double? cahaya = double.tryParse(controllerCahaya.text);
-      double? amonia = double.tryParse(controllerAmonia.text);
-      double? bising = double.tryParse(controllerBising.text);
+      ayam = double.tryParse(controllerAyam.text);
+      pakan = double.tryParse(controllerPakan.text);
+      suhu = double.tryParse(controllerSuhu.text);
+      kelembaban = double.tryParse(controllerKelembaban.text);
+      cahaya = double.tryParse(controllerCahaya.text);
+      amonia = double.tryParse(controllerAmonia.text);
+      bising = double.tryParse(controllerBising.text);
 
-      FCRModel fcrModel = FCRModel(
+      DateTime dateTime = DateTime.now();
+      namaHari = DateFormat('EEEE', 'id').format(dateTime);
+      tanggalLengkap= DateFormat('dd MMMM yyyy', 'id').format(dateTime);
+
+      fcrModel = FCRModel(
         ayam: ayam!,
         pakan: pakan!,
         amonia: amonia!,
@@ -330,6 +351,8 @@ class InputBottom extends StatelessWidget {
         kelembaban: kelembaban!,
         cahaya: cahaya!,
         bising: bising!,
+        namaHari: namaHari!,
+        tanggalLengkap: tanggalLengkap!
       );
 
       wrongInputModel wrongInput = wrongInputModel();
@@ -342,20 +365,47 @@ class InputBottom extends StatelessWidget {
       // controllerAmonia.clear();
       // controllerBising.clear();
 
-      double resultFCR = FCRController().calculatedFCR(inputData: fcrModel);
+      resultFCR = FCRController().calculatedFCR(inputData: fcrModel!);
       wrongInputModel validationResult = FCRController().validationCheck(
-        inputData: fcrModel,
+        inputData: fcrModel!,
         wrongInput: wrongInput,
       );
-      List<String> listWrongInput = FCRController().getValidation(
+      listWrongInput = FCRController().getValidation(
         validationResult: validationResult,
       );
 
+      inputRusakModel = InputRusakModel(inputRusak: listWrongInput!);
+
       print(validationResult.toString());
       print(listWrongInput);
-      // print('Perlu penyesuaian input: $validationResult');
 
-      return resultFCR;
+      return resultFCR!;
+    }
+
+    Future insertInputToDatabase() async {
+      try {
+        print(inputRusakModel.toString());
+        int idTabelInputRusak = await ServiceDatabase.instance.insertTabelInputRusak(inputRusakModel!);
+        print('Berhasil insert data ke tabel rusak');
+        fcrModel = FCRModel(
+          ayam: ayam!, 
+          pakan: pakan!, 
+          amonia: amonia!, 
+          suhu: suhu!, 
+          kelembaban: kelembaban!, 
+          cahaya: cahaya!, 
+          bising: bising!, 
+          namaHari: namaHari!, 
+          tanggalLengkap: tanggalLengkap!,
+          hasilFCR: resultFCR,
+          idRusak: idTabelInputRusak
+        );
+        await ServiceDatabase.instance.insertTabelLogFCR(fcrModel!);
+        print(fcrModel.toString());
+        print('Berhasil insert data ke tabel fcr');
+      } catch (e) {
+        print('Gagal insert data: $e');
+      }
     }
 
     Widget trueBottom() {
@@ -380,7 +430,8 @@ class InputBottom extends StatelessWidget {
             SizedBox(width: 10),
             Expanded(
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  await insertInputToDatabase();
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colours.mainOrange,

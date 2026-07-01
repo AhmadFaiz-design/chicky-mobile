@@ -1,4 +1,5 @@
 import 'package:chicky/models/fcr_model.dart';
+import 'package:chicky/models/input_rusak_model.dart';
 
 class FCRController {
 
@@ -32,7 +33,7 @@ class FCRController {
     required wrongInputModel wrongInput,
   }) {
     if (inputData.ayam <= 10) {
-      if (inputData.pakan < 1.1) {
+      if (inputData.pakan < 0.9) {
         wrongInput.pakan = inputData.pakan;
       }
     }
