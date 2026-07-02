@@ -93,7 +93,7 @@ class HistoryCard extends StatelessWidget {
     required this.currentIndex,
     required this.removeIndex,
     required this.fcrModel,
-    required this.inputRusakModel
+    required this.inputRusakModel,
   });
 
   Widget _ListIndicates() {
@@ -168,7 +168,10 @@ class HistoryCard extends StatelessWidget {
                     // SizedBox(width: 4),
                     Text(","),
                     SizedBox(width: 4),
-                    Text(fcrModel.tanggalLengkap, style: TextStyle(fontSize: 12)),
+                    Text(
+                      fcrModel.tanggalLengkap,
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ],
                 ),
               ),
@@ -204,102 +207,115 @@ class HistoryCard extends StatelessWidget {
                       //   ),
                       // ),
                       // SizedBox(width: 8),
-                      inputRusakModel.inputRusak.isNotEmpty ? Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 4,
-                          horizontal: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colours.red.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colours.red,
-                              ),
+                      inputRusakModel.inputRusak.isNotEmpty
+                          ? Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
                             ),
-                            SizedBox(width: 6),
-                            Text(
-                              '${inputRusakModel.inputRusak.length.toString()} Indikasi',
-                              style: TextStyle(
-                                color: Colours.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            decoration: BoxDecoration(
+                              color: Colours.red.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          ],
-                        ),
-                      ) : Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 4,
-                          horizontal: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colours.green.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colours.green,
-                              ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colours.red,
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  '${inputRusakModel.inputRusak.length.toString()} Indikasi',
+                                  style: TextStyle(
+                                    color: Colours.red,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 6),
-                            Text(
-                              'Semua baik',
-                              style: TextStyle(
-                                color: Colours.green,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          )
+                          : Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
                             ),
-                          ],
-                        ),
-                      )
+                            decoration: BoxDecoration(
+                              color: Colours.green.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colours.green,
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  'Semua baik',
+                                  style: TextStyle(
+                                    color: Colours.green,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                     ],
                   ),
                 ],
               ),
-              inputRusakModel.inputRusak.isNotEmpty ? TextButton(
-                onPressed: () {
-                  // bool newTapped;
-                  if (removeIndex.contains(idButton)) {
-                    removeIndex.remove(idButton);
-                    currentIndex.add(idButton);
-                    callback(removeIndex, currentIndex);
-                  } else if (currentIndex.contains(idButton)) {
-                    currentIndex.remove(idButton);
-                    removeIndex.add(idButton);
-                    callback(removeIndex, currentIndex);
-                  }
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colours.mainOrange,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                ),
-                child:
-                    currentIndex.contains(idButton)
-                        ? Text(
-                          "More",
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        )
-                        : Text(
-                          "Less",
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        ),
-              ) : SizedBox()
+              inputRusakModel.inputRusak.isNotEmpty
+                  ? TextButton(
+                    onPressed: () {
+                      // bool newTapped;
+                      if (removeIndex.contains(idButton)) {
+                        removeIndex.remove(idButton);
+                        currentIndex.add(idButton);
+                        callback(removeIndex, currentIndex);
+                      } else if (currentIndex.contains(idButton)) {
+                        currentIndex.remove(idButton);
+                        removeIndex.add(idButton);
+                        callback(removeIndex, currentIndex);
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colours.mainOrange,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                    ),
+                    child:
+                        currentIndex.contains(idButton)
+                            ? Text(
+                              "More",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            )
+                            : Text(
+                              "Less",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                  )
+                  : SizedBox(),
             ],
           ),
           removeIndex.contains(idButton) ? _ListIndicates() : Container(),
@@ -310,6 +326,10 @@ class HistoryCard extends StatelessWidget {
 }
 
 class ListHistoryCard extends StatefulWidget {
+  final int idButton;
+
+  ListHistoryCard({required this.idButton});
+
   @override
   State<ListHistoryCard> createState() => ListHistoryCardState();
 }
@@ -317,8 +337,8 @@ class ListHistoryCard extends StatefulWidget {
 class ListHistoryCardState extends State<ListHistoryCard> {
   late bool _isTapped;
   List<int>? currentIndex;
+  List<int>? removeIndex;
   List<FcrHistoryModel>? _historyList;
-  late List<int> removeIndex;
   late Future _newGetDatabase;
 
   @override
@@ -326,24 +346,48 @@ class ListHistoryCardState extends State<ListHistoryCard> {
     _isTapped = false;
     removeIndex = [];
     currentIndex = [];
-    _newGetDatabase = _getDatabase();
+    _newGetDatabase = _getDatabase(idButton: widget.idButton);
     super.initState();
   }
 
-  Future _getDatabase() async {
-    int number = 0;
-    try {
-      // _fcrModel = await ServiceDatabase.instance.getAllDataFCR();
-      // _inputRusakModel = await ServiceDatabase.instance.getAllDataRusak();
-      // _fcrModel!.map((data) => {currentIndex!.add(number++)});
-      _historyList = await ServiceDatabase.instance.getFcrHistory();
-      _historyList!.forEach((data) => currentIndex!.add(number++));
-      print('Berhasil Mengambil tabel JOIN: $_historyList');
-      // print('Berhasil Mengambil tabel log FCR: $_fcrModel');
-      // print('Berhasil Mengambil tabel rusak: $_inputRusakModel');
-    } catch (e) {
-      print('Gagal ambil database: $e');
+  @override
+  void didUpdateWidget(covariant ListHistoryCard oldWidget) {
+    if(oldWidget.idButton != widget.idButton){
+      setState(() {
+        _newGetDatabase = _getDatabase(idButton: widget.idButton);
+      });
     }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  Future<List<FcrHistoryModel>> _getDatabase({required int idButton}) async {
+    int number = 0;
+    currentIndex = [];
+    removeIndex = [];
+    List<FcrHistoryModel>? filteredList;
+
+    print('Mengambil database berdasarkan id: $idButton');
+
+    List<FcrHistoryModel> rawList = await ServiceDatabase.instance.getFcrHistory();
+
+    if(idButton == 0){
+      filteredList = rawList;
+      filteredList.forEach((data) => currentIndex!.add(number++));
+      print(currentIndex);
+    }else if (idButton == 1){
+      filteredList = await rawList.where((data) => data.inputRusak.isEmpty).toList();
+      filteredList.forEach((data) => currentIndex!.add(number++));
+      print(currentIndex);
+    }else if (idButton == 2) {
+      filteredList = await rawList.where((data) => data.inputRusak.isNotEmpty).toList();
+      filteredList.forEach((data) => currentIndex!.add(number++));
+      print(currentIndex);
+    }
+
+    _historyList = filteredList;
+    return filteredList!;
+
+    
   }
 
   Widget connectionSuccessfuly({required List<FcrHistoryModel> historyList}) {
@@ -366,9 +410,11 @@ class ListHistoryCardState extends State<ListHistoryCard> {
           isTapped: _isTapped,
           idButton: idButton,
           currentIndex: currentIndex!,
-          removeIndex: removeIndex,
+          removeIndex: removeIndex!,
           fcrModel: historyList[index].fcr,
-          inputRusakModel: InputRusakModel(inputRusak: historyList[index].inputRusak),
+          inputRusakModel: InputRusakModel(
+            inputRusak: historyList[index].inputRusak,
+          ),
         );
       },
     );
@@ -377,33 +423,47 @@ class ListHistoryCardState extends State<ListHistoryCard> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _newGetDatabase, 
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.waiting){
+      future: _newGetDatabase,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          if(_historyList!.isNotEmpty){
-            return connectionSuccessfuly(
-            historyList: _historyList!,
-        );
+          if (_historyList!.isNotEmpty) {
+            return connectionSuccessfuly(historyList: _historyList!);
           }
         }
         print(snapshot.data);
-          return Container(
-            height: 400,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 100, width: 100, child: SvgPicture.asset(IconsSVG.empty, colorFilter: ColorFilter.mode(Colours.gray.withOpacity(0.5), BlendMode.srcIn,),)),
-                  SizedBox(height: 10,),
-                  Text('Belum ada data FCR yang dimasukkan!', style: TextStyle(fontWeight: FontWeight.w500, color: Colours.gray),),
-                ],
-              ),
+        return Container(
+          height: 400,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: SvgPicture.asset(
+                    IconsSVG.empty,
+                    colorFilter: ColorFilter.mode(
+                      Colours.gray.withOpacity(0.5),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Belum ada data FCR yang dimasukkan!',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colours.gray,
+                  ),
+                ),
+              ],
             ),
-          );
-      }
+          ),
+        );
+      },
     );
   }
 }
@@ -415,6 +475,14 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class HistoryState extends State<HistoryScreen> {
+  late int idButton;
+
+  @override
+  void initState() {
+    idButton = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -423,7 +491,18 @@ class HistoryState extends State<HistoryScreen> {
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
-            children: [HeaderCard(), FilterCardHistory(), ListHistoryCard()],
+            children: [
+              HeaderCard(),
+              FilterCardHistory(
+                callback: (idButton) {
+                  setState(() {
+                    this.idButton = idButton;
+                    print(this.idButton);
+                  });
+                },
+              ),
+              ListHistoryCard(idButton: idButton,),
+            ],
           ),
         ),
       ),

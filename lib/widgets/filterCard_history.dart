@@ -1,3 +1,4 @@
+import 'package:chicky/models/fcrHistory_model.dart';
 import 'package:flutter/material.dart';
 import 'package:chicky/core/colours.dart';
 
@@ -38,11 +39,17 @@ class _FilterButton extends StatelessWidget {
 }
 
 class FilterCardHistory extends StatefulWidget {
+  final Function callback;
+  List<FcrHistoryModel>? historyList;
+
+  FilterCardHistory({required this.callback});
+
   @override
   State<FilterCardHistory> createState() => FilterCardState();
 }
 
 class FilterCardState extends State<FilterCardHistory> {
+
   int index = 0;
 
   @override
@@ -54,6 +61,7 @@ class FilterCardState extends State<FilterCardHistory> {
   void _getQuery(int _selecetedIndex) {
     setState(() {
       index = _selecetedIndex;
+      widget.callback(index);
     });
   }
 
