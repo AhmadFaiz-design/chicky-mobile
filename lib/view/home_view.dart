@@ -1,4 +1,6 @@
 import 'package:chicky/core/icons.dart';
+import 'package:chicky/models/fcrHistory_model.dart';
+import 'package:chicky/services/service_database.dart';
 import 'package:chicky/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import '../core/colours.dart';
@@ -47,10 +49,16 @@ class _HeaderCard extends StatelessWidget {
 }
 
 class _Dashboard extends StatelessWidget {
+  final double ayam;
+  final double pakan;
+  final double telur;
+
+  _Dashboard({required this.ayam, required this.pakan, required this.telur});
+
   Widget _cardRow({
     required String icon,
     required String name,
-    required int sum,
+    required double sum,
   }) {
     return Expanded(
       child: Container(
@@ -103,11 +111,11 @@ class _Dashboard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 14),
       child: Row(
         children: [
-          _cardRow(icon: IconsSVG.chicken, name: "Ayam", sum: 200),
+          _cardRow(icon: IconsSVG.chicken, name: "Ayam", sum: ayam),
           SizedBox(width: 8),
-          _cardRow(icon: IconsSVG.beans, name: "Pakan", sum: 175),
+          _cardRow(icon: IconsSVG.beans, name: "Pakan", sum: pakan),
           SizedBox(width: 8),
-          _cardRow(icon: IconsSVG.egg, name: "Telur", sum: 2000),
+          _cardRow(icon: IconsSVG.egg, name: "Telur", sum: telur),
         ],
       ),
     );
@@ -169,10 +177,13 @@ class _BannerCard extends StatelessWidget {
 }
 
 class _RecentHistoryLog extends StatelessWidget {
+  final List<FcrHistoryModel> listFCR;
+
+  _RecentHistoryLog({required this.listFCR});
 
   @override
   Widget build(BuildContext context) {
-    final List<double> dataFCR = [1.1, 1.2, 0.8];
+    List<FcrHistoryModel> listOfThree = listFCR.getRange(0,3).toList();
 
     return Container(
       padding: EdgeInsets.all(20),
@@ -192,11 +203,20 @@ class _RecentHistoryLog extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavbar(index: 2)));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavbar(index: 2),
+                    ),
+                  );
                 },
                 child: Text(
                   "See all",
-                  style: TextStyle(color: Colours.mainOrange, fontSize: 14, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    color: Colours.mainOrange,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
@@ -205,14 +225,14 @@ class _RecentHistoryLog extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: dataFCR.length,
+            itemCount: listOfThree.length,
             itemBuilder: (context, index) {
               return Container(
                 margin: EdgeInsets.only(bottom: 10),
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colours.gray),
-                  borderRadius: BorderRadius.circular(12)
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 width: double.infinity,
                 child: Row(
@@ -221,22 +241,97 @@ class _RecentHistoryLog extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${dataFCR[index].toString()} Kg", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                        Text("low to 1%", style: TextStyle(color: Colours.green, fontSize: 12,))
+                        Text(
+                          "${listOfThree[index].fcr.hasilFCR!.toStringAsFixed(1)} Kg",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4,),
+                        listOfThree[index].inputRusak.isNotEmpty
+                          ? Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colours.red.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colours.red,
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  '${listOfThree[index].inputRusak.length.toString()} Indikasi',
+                                  style: TextStyle(
+                                    color: Colours.red,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                          : Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colours.green.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colours.green,
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  'Semua baik',
+                                  style: TextStyle(
+                                    color: Colours.green,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("Kamis", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                        Text("21-12-2012", style: TextStyle( fontSize: 12,))
+                        Text(
+                          listOfThree[index].fcr.namaHari,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(listOfThree[index].fcr.tanggalLengkap, style: TextStyle(fontSize: 12)),
                       ],
-                    )
+                    ),
                   ],
                 ),
               );
-            }
-          )
+            },
+          ),
         ],
       ),
     );
@@ -250,6 +345,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeState extends State<HomeScreen> {
+  late List<FcrHistoryModel> _listDataFCR;
+  late List<FcrHistoryModel> _listSoretedFCR;
+  late FcrHistoryModel _latestFCR;
+  Future? _newGetDB;
+
+  @override
+  void initState() {
+    _newGetDB = _getDB();
+    super.initState();
+  }
+
+  Future _getDB() async {
+    _listDataFCR = await ServiceDatabase.instance.getFCRForChart();
+    // _listSoretedFCR = _listDataFCR.reversed.toList(); 
+    _latestFCR = _listDataFCR[0];
+    print('Berhasil Mengambil 7 Data FCR: $_listDataFCR ');
+    print('Data FCR terbaru: ${_latestFCR.toString()} ');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,14 +371,22 @@ class HomeState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              _HeaderCard(),
-              FcrDesemberChart(),
-              _Dashboard(),
-              _BannerCard(),
-              _RecentHistoryLog(),
-            ],
+          child: FutureBuilder(
+            future: _newGetDB,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+              return Column(
+                children: [
+                  _HeaderCard(),
+                  FcrChart(listRecentFCR: _listDataFCR),
+                  _Dashboard(ayam: _latestFCR.fcr.ayam, pakan: _latestFCR.fcr.pakan, telur: _latestFCR.fcr.predictTelur!,),
+                  _BannerCard(),
+                  _RecentHistoryLog(listFCR: _listDataFCR,),
+                ],
+              );
+            },
           ),
         ),
       ),

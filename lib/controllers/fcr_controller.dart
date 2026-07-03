@@ -1,5 +1,4 @@
 import 'package:chicky/models/fcr_model.dart';
-import 'package:chicky/models/input_rusak_model.dart';
 
 class FCRController {
 

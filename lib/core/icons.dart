@@ -7,4 +7,5 @@ class IconsSVG{
   static const String pencil = 'assets/icons/pencil.svg';
   static const String file = 'assets/icons/file.svg';
   static const String empty = 'assets/icons/cloud-download.svg';
+  static const String chart = 'assets/icons/antenna_bars_high_contrast.svg';
 }
