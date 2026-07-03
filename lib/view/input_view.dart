@@ -290,7 +290,7 @@ class InputBottom extends StatelessWidget {
   static FCRModel? fcrModel;
   static InputRusakModel? inputRusakModel;
   static List<String>? listWrongInput;
-  static double? resultFCR;
+  static List<double>? listResulttFCR;
   static double? ayam;
   static double? pakan;
   static double? suhu;
@@ -315,7 +315,7 @@ class InputBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<double> predictedFCR() async {
+    Future<List<double>> predictedFCR() async {
       bool isDataEmpty = [
         controllerAyam.text,
         controllerPakan.text,
@@ -328,7 +328,7 @@ class InputBottom extends StatelessWidget {
 
       if (isDataEmpty) {
         print("Data belum diisi lengkap");
-        return 0.0;
+        return [0.0, 0.0];
       }
 
       ayam = double.tryParse(controllerAyam.text);
@@ -365,7 +365,7 @@ class InputBottom extends StatelessWidget {
       // controllerAmonia.clear();
       // controllerBising.clear();
 
-      resultFCR = FCRController().calculatedFCR(inputData: fcrModel!);
+      listResulttFCR = FCRController().calculatedFCR(inputData: fcrModel!);
       wrongInputModel validationResult = FCRController().validationCheck(
         inputData: fcrModel!,
         wrongInput: wrongInput,
@@ -379,7 +379,7 @@ class InputBottom extends StatelessWidget {
       print(validationResult.toString());
       print(listWrongInput);
 
-      return resultFCR!;
+      return listResulttFCR!;
     }
 
     Future insertInputToDatabase() async {
@@ -397,7 +397,8 @@ class InputBottom extends StatelessWidget {
           bising: bising!, 
           namaHari: namaHari!, 
           tanggalLengkap: tanggalLengkap!,
-          hasilFCR: resultFCR,
+          hasilFCR: listResulttFCR![1],
+          predictTelur: listResulttFCR![0],
           idRusak: idTabelInputRusak
         );
         await ServiceDatabase.instance.insertTabelLogFCR(fcrModel!);
@@ -417,8 +418,8 @@ class InputBottom extends StatelessWidget {
               child: TextButton(
                 onPressed: () async {
                   bool status = true;
-                  double result = await predictedFCR();
-                  callback(result, status);
+                  List<double> result = await predictedFCR();
+                  callback(result[1], status);
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colours.mainOrange,
@@ -454,12 +455,12 @@ class InputBottom extends StatelessWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () async {
-                        double result = await predictedFCR();
+                        List<double> result = await predictedFCR();
                         bool newStatus = true;
-                        if(result == 0.0){
+                        if(result[1] == 0.0){
                           newStatus = false;
                         }
-                        callback(result, newStatus);
+                        callback(result[1], newStatus);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colours.mainOrange,

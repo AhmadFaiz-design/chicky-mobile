@@ -2,6 +2,7 @@ class FCRModel {
   int? id;
   int? idRusak;
   double? hasilFCR;
+  double? predictTelur;
   final double ayam;
   final double pakan;
   final double amonia;
@@ -16,6 +17,7 @@ class FCRModel {
     this.id,
     this.idRusak,
     this.hasilFCR,
+    this.predictTelur,
     required this.ayam,
     required this.pakan,
     required this.amonia,
@@ -40,6 +42,7 @@ class FCRModel {
     namaHari: json['namaHari'], 
     tanggalLengkap: json['tanggalLengkap'],
     idRusak: json['id_log_rusak'],
+    predictTelur: json['predict_telur']
     );
 
   Map<String, dynamic> tomap() => {
@@ -54,12 +57,13 @@ class FCRModel {
     'namaHari': namaHari,
     'tanggalLengkap': tanggalLengkap,
     'hasilFCR' : hasilFCR,
-    'id_log_rusak': idRusak
+    'id_log_rusak': idRusak,
+    'predict_telur': predictTelur
   };
 
   @override
   String toString() {
-    return 'FCRModel("id: $id", "id_log_rusak: $idRusak","ayam: $ayam", "pakan: $pakan", "suhu: $suhu", "kelembaban: $kelembaban", "amonia: $amonia", "cahaya: $cahaya", "bising: $bising", "hasilFCR: $hasilFCR", "namaHari: $namaHari", "tanggalLengkap: $tanggalLengkap")';
+    return 'FCRModel("id: $id", "id_log_rusak: $idRusak","ayam: $ayam", "pakan: $pakan", "suhu: $suhu", "kelembaban: $kelembaban", "amonia: $amonia", "cahaya: $cahaya", "bising: $bising", "hasilFCR: $hasilFCR", "predict_telur: $predictTelur", "namaHari: $namaHari", "tanggalLengkap: $tanggalLengkap")';
   }
 }
 

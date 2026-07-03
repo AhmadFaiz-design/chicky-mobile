@@ -11,7 +11,7 @@ class ServiceDatabase {
   ServiceDatabase._init();
 
   Future<Database> get database async {
-    if(_database != null) return _database!;
+    if (_database != null) return _database!;
 
     _database = await initDB('chicky_db');
     return _database!;
@@ -20,7 +20,7 @@ class ServiceDatabase {
   // Inisialisasi Database, jika database belum ada
   Future<Database> initDB(String path) async {
     String path_db = await getDatabasesPath();
-    String db = join(path_db,path);
+    String db = join(path_db, path);
     return await openDatabase(db, version: 1, onCreate: _createDB);
   }
 
@@ -35,6 +35,7 @@ class ServiceDatabase {
       kelembaban REAL NOT NULL,
       cahaya REAL NOT NULL,
       bising REAL NOT NULL,
+      predict_telur REAL NOT NULL,
       namahari TEXT NOT NULL,
       tanggalLengkap TEXT NOT NULL,
       id_log_rusak INTEGER,
@@ -57,7 +58,9 @@ class ServiceDatabase {
     Database db = await instance.database;
     String inputRusakToString = inputRusak.inputRusak.join(',');
     print('Text input: $inputRusakToString');
-    return await db.insert('tabel_input_rusak', {'nama_inputan_rusak': inputRusakToString});
+    return await db.insert('tabel_input_rusak', {
+      'nama_inputan_rusak': inputRusakToString,
+    });
   }
 
   Future<List<FCRModel>> getAllDataFCR() async {
@@ -73,17 +76,28 @@ class ServiceDatabase {
   }
 
   Future<List<FcrHistoryModel>> getFcrHistory() async {
-  Database db = await instance.database;
-  
-  // Menggabungkan tabel_log_fcr dengan tabel_input_rusak berdasarkan jembatan FK id_log_rusak
-  final List<Map<String, dynamic>> maps = await db.rawQuery('''
+    Database db = await instance.database;
+
+    // Menggabungkan tabel_log_fcr dengan tabel_input_rusak berdasarkan jembatan FK id_log_rusak
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
     SELECT f.*, r.nama_inputan_rusak 
     FROM tabel_log_fcr f
     LEFT JOIN tabel_input_rusak r ON f.id_log_rusak = r.id
     ORDER BY f.id DESC
-  ''');
+    ''');
 
-  return maps.map((json) => FcrHistoryModel.fromMap(json)).toList();
-}
+    return maps.map((json) => FcrHistoryModel.fromMap(json)).toList();
+  }
 
+  Future<List<FcrHistoryModel>> getFCRForChart() async {
+    Database db = await instance.database;
+    final List<Map<String, dynamic>> raw = await db.rawQuery('''
+    SELECT f.*, r.nama_inputan_rusak 
+    FROM tabel_log_fcr f
+    LEFT JOIN tabel_input_rusak r ON f.id_log_rusak = r.id
+    ORDER BY f.id DESC
+    LIMIT 7
+    ''');
+    return raw.map((json) => FcrHistoryModel.fromMap(json)).toList();
+  }
 }

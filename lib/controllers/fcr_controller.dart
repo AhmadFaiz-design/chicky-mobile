@@ -60,7 +60,7 @@ class FCRController {
     return wrongInput;
   }
 
-  double calculatedFCR({
+  List<double> calculatedFCR({
     required FCRModel inputData,
   }) {
     const double intercept = -2.5;
@@ -83,17 +83,17 @@ class FCRController {
         (wNoise * inputData.bising);
 
     // Mencegah hasil minus jika ayam stres berat
-    if (eggProductionResult < 0) return 0.0;
+    if (eggProductionResult < 0) return [0.0, 0.0];
 
     print('Jumlah prediksi telur: $eggProductionResult');
 
     // Rata-rata berat 1 butir telur ayam ras adalah 60 gram (0.06 Kg)
     double eggWeight = eggProductionResult * 0.06;
-    double resultFCR = inputData.pakan / eggWeight;
-    inputData.hasilFCR = resultFCR;
+    double rawresultFCR = inputData.pakan / eggWeight;
+    List<double> resultFCR = [eggProductionResult, rawresultFCR];
 
     print('Total Berat Telur:  $eggWeight');
-    print('Hasil FCR:  $resultFCR');
+    print('Hasil FCR:  $rawresultFCR');
 
     return resultFCR;
   }
